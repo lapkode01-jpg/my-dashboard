@@ -73,7 +73,10 @@
 
                 <div class="mood-box">
                     <label>Как настроение прямо сейчас? <span id="moodEmoji">🥰</span></label>
-                    <input type="range" min="1" max="5" value="5" class="mood-slider" id="moodSlider" oninput="updateMood(this.value)">
+                    <!-- Добавлен onchange, чтобы при сдвиге ползунка настроение сразу улетало на бэкенд -->
+                    <input type="range" min="1" max="5" value="5" class="mood-slider" id="moodSlider"
+                           oninput="updateMood(this.value)"
+                           onchange="sendSignal('mood_update', '✨ Настроение обновлено!')">
                 </div>
 
                 <!-- Интерактивный мини-опрос с убегающей кнопкой и ПРАЗДНИКОМ -->
@@ -492,11 +495,15 @@
         async function sendSignal(actionType, messageText, customMessage = null) {
             const timeField = document.getElementById('signalTextField');
             const datetimeBlock = document.getElementById('datetimeBlock');
+            const moodSlider = document.getElementById('moodSlider');
 
             let customTimeText = "Текущее время";
             if (!datetimeBlock.classList.contains('hidden-block') && timeField) {
                 customTimeText = timeField.value;
             }
+
+            // Получаем текущее значение слайдера настроения (от 1 до 5)
+            const currentMood = moodSlider ? parseInt(moodSlider.value) : 5;
 
             const banner = document.getElementById('responseBanner');
             banner.style.transform = "scale(1.02)";
@@ -504,13 +511,14 @@
             banner.innerHTML = `💌 ${messageText}`;
 
             try {
-                let response = await fetch(`/api/v1/actions/`, {
+                let response = await fetch(`${API_URL}/api/v1/actions/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         action_type: actionType,
                         custom_time_text: customTimeText,
                         message: customMessage,
+                        mood: currentMood, // <-- Добавлено поле с настроением для бэкенда
                         timestamp: new Date().toISOString()
                     })
                 });
@@ -524,7 +532,7 @@
                     }
                 }
             } catch (e) {
-                console.log("Сигнал отправлен локально:", actionType, customMessage);
+                console.log("Сигнал отправлен локально:", actionType, customMessage, "Настроение:", currentMood);
             }
         }
 
