@@ -2,7 +2,7 @@ import os
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .schemas import ActionsSchema
+from backend.schemas import ActionsSchema
 from aiogram import Bot
 from dotenv import load_dotenv
 load_dotenv()
