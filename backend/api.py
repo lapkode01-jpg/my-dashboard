@@ -35,7 +35,8 @@ counters = {
 
 @app.get('/')
 async def main():
-    return FileResponse(BASE_DIR / 'static' /' index.html')
+    file_path = BASE_DIR / "static" / "index.html"
+    return FileResponse(path=file_path)
 
 @app.post('/api/v1/actions/')
 async def main_actions(body_text: ActionsSchema):
