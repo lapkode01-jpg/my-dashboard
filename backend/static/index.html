@@ -215,7 +215,7 @@
 
         async function loadStats() {
             try {
-                let response = await fetch(`${API_URL}/api/v1/stats`);
+                let response = await fetch(`/api/v1/stats`);
                 if (response.ok) {
                     let data = await response.json();
                     document.getElementById('valSweet').innerText = data.sweet || 0;
