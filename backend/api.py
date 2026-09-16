@@ -21,7 +21,7 @@ app.add_middleware(
 bot = Bot(os.getenv('BOT_TOKEN'))
 
 BASE_DIR = Path(__file__).resolve().parent
-app.mount('/static', StaticFiles(directory='static'), name='static')
+app.mount('/static', StaticFiles(directory=BASE_DIR / 'static'), name='static')
 
 counters = {
     "coffee": 0,
