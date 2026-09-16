@@ -1,7 +1,10 @@
 import os
-
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.responses import FileResponse
+from starlette.staticfiles import StaticFiles
+
 from backend.schemas import ActionsSchema
 from aiogram import Bot
 from dotenv import load_dotenv
@@ -16,6 +19,8 @@ app.add_middleware(
 )
 bot = Bot(os.getenv('BOT_TOKEN'))
 
+BASE_DIR = Path(__file__).resolve().parent
+app.mount('/static', StaticFiles(directory=BASE_DIR / 'static'), name='static')
 
 counters = {
     "coffee": 0,
@@ -27,6 +32,9 @@ counters = {
     "custom": 0
 }
 
+@app.get('/')
+async def main():
+    return FileResponse('static/index.html')
 
 @app.post('/api/v1/actions/')
 async def main_actions(body_text: ActionsSchema):
