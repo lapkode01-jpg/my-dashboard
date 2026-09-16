@@ -72,7 +72,6 @@ async def main_actions(body_text: ActionsSchema):
         f"• **Действие:** {desc}\n"
         f"• **Время:** {time}\n"
         f"• **Счетчик:** {counters.get(action_type, 'N/A')}"
-        f"• **Счетчик:** {counters.get(action_type, 'N/A')}"
     )
     try:
         await bot.send_message(
