@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для тебя, моя хорошая 💖 (Осторожно, взрывоопасно!)</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Живой анимированный фон (летающие сердечки и звезды) -->
+    <canvas id="bgCanvas"></canvas>
+
+    <!-- Canvas для эпичного взрыва / праздничного салюта -->
+    <canvas id="explosionCanvas"></canvas>
+
+    <!-- Полностраничный контейнер -->
+    <div class="page-wrapper" id="pageWrapper">
+
+        <!-- Шапка сайта -->
+        <header class="main-header" id="mainHeader">
+            <div class="header-badge-container">
+                <div class="header-badge">
+                    <i class="fa-solid fa-heart pulse-icon"></i> Специально для тебя
+                </div>
+                <button class="secret-trigger-btn" onclick="requestAdminAccess()" title="Вход"></button>
+            </div>
+
+            <h1>Уголок нежности и тепла</h1>
+            <p>Выбирай, что тебе хочется, отправляй мне сигналы, а я мгновенно всё получу на бэкенд! 🥰</p>
+        </header>
+
+        <!-- Основной контент -->
+        <main class="content-grid" id="mainContentGrid">
+
+            <!-- Левая колонка -->
+            <section class="card stats-card-box" id="leftCard">
+                <div class="love-counter-box">
+                    <div class="counter-icon"><i class="fa-solid fa-calendar-days"></i></div>
+                    <div class="counter-info">
+                        <span class="counter-title">Вместе уже</span>
+                        <span class="counter-value" id="daysTogether">0 дней 💖</span>
+                    </div>
+                </div>
+
+                <h2><i class="fa-solid fa-chart-pie"></i> Твоя статистика</h2>
+                <div class="stats-list">
+                    <div class="stat-row">
+                        <div class="stat-info">
+                            <span class="s-icon hug"><i class="fa-solid fa-hands-holding-child"></i></span>
+                            <span>Получено обнимашек</span>
+                        </div>
+                        <span class="s-val" id="valHugs">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <div class="stat-info">
+                            <span class="s-icon sweet"><i class="fa-solid fa-cookie-bite"></i></span>
+                            <span>Вкусняшек запрошено</span>
+                        </div>
+                        <span class="s-val" id="valSweet">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <div class="stat-info">
+                            <span class="s-icon miss"><i class="fa-solid fa-face-sad-tear"></i></span>
+                            <span>Сигналов «Скучаю»</span>
+                        </div>
+                        <span class="s-val" id="valMiss">0</span>
+                    </div>
+                </div>
+
+                <div class="mood-box">
+                    <label>Как настроение прямо сейчас? <span id="moodEmoji">🥰</span></label>
+                    <input type="range" min="1" max="5" value="5" class="mood-slider" id="moodSlider" oninput="updateMood(this.value)">
+                </div>
+
+                <!-- Интерактивный мини-опрос с убегающей кнопкой и ПРАЗДНИКОМ -->
+                <div class="interactive-mini-card" id="interactiveCard">
+                    <h3><i class="fa-solid fa-face-grin-hearts"></i> Важный вопрос:</h3>
+                    <p id="questionText">Ты меня любишь? 💕</p>
+                    <div class="interactive-btns" id="interactiveBtns">
+                        <button class="yes-interactive-btn" onclick="answerYesCelebration()">Конечно! 🥰</button>
+                        <button class="run-interactive-btn" id="runBtn" onmouseover="moveButton()" onclick="answerNoMegaExplosion()">Нет 🙈</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Правая колонка -->
+            <section class="card actions-card-box" id="rightCard">
+                <h2><i class="fa-solid fa-wand-magic-sparkles"></i> Отправить сигнал разработчику</h2>
+                <p class="section-desc">Выбирай действие и отправляй сигнал на бэкенд:</p>
+
+                <div class="custom-datetime-container hidden-block" id="datetimeBlock">
+                    <div class="dt-text-input-group">
+                        <label>
+                            <span><i class="fa-solid fa-pen-nib"></i> Панель админа (дата для сигнала):</span>
+                            <button class="close-panel-btn" onclick="hideAdminPanel()" title="Скрыть панель">Скрыть ✕</button>
+                        </label>
+                        <input type="text" id="signalTextField" placeholder="Например: 16 сентября, вечер 🌙" oninput="syncDisplayTime(this.value)">
+                    </div>
+
+                    <div class="dt-preview-screen">
+                        <div class="preview-label"><i class="fa-solid fa-clock-rotate-left"></i> Текущая отметка для сигнала:</div>
+                        <div class="preview-value" id="displayTimePreview">16 сентября, вечер 🌙</div>
+                    </div>
+                </div>
+
+                <div class="actions-grid">
+                    <button class="action-btn" onclick="sendSignal('sweet', '🍫 Сладкий перекус уже на подходе!')">
+                        <span class="btn-icon">🍫</span>
+                        <span class="btn-title">Вкусняшка</span>
+                        <span class="btn-sub">Запросить сладость</span>
+                    </button>
+
+                    <button class="action-btn" onclick="sendSignal('hug', '🤗 Крепко-крепко обнимаю и целую!')">
+                        <span class="btn-icon">🤗</span>
+                        <span class="btn-title">Обнять тебя</span>
+                        <span class="btn-sub">Срочная доза тепла</span>
+                    </button>
+
+                    <button class="action-btn" onclick="sendSignal('call', '📞 Разработчик услышал сигнал и уже набирает тебя!')">
+                        <span class="btn-icon">📱</span>
+                        <span class="btn-title">Позвони мне</span>
+                        <span class="btn-sub">Хочу услышать голос</span>
+                    </button>
+
+                    <button class="action-btn" onclick="sendSignal('work', '🛑 Хватит кодить! Срочно перерыв и отдых!')">
+                        <span class="btn-icon">💻</span>
+                        <span class="btn-title">Хватит работать!</span>
+                        <span class="btn-sub">Оторвись от монитора</span>
+                    </button>
+
+                    <button class="action-btn" onclick="sendSignal('movie', '🍿 Отличный выбор! Выбираем кино на вечер.')">
+                        <span class="btn-icon">🎬</span>
+                        <span class="btn-title">Выбрать фильм</span>
+                        <span class="btn-sub">Устроить кинопросмотр</span>
+                    </button>
+
+                    <button class="action-btn" onclick="sendSignal('miss', '🥺 Разработчик уже бросил код и бежит к тебе!')">
+                        <span class="btn-icon">🥺</span>
+                        <span class="btn-title">Я скучаю</span>
+                        <span class="btn-sub">Вызвать экстренно</span>
+                    </button>
+                </div>
+
+                <div class="custom-message-box">
+                    <input type="text" id="customMsgInput" placeholder="Или напиши мне свое сообщение/пожелание...">
+                    <button onclick="sendCustomMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+
+                <div class="response-banner" id="responseBanner">
+                    ✨ Выбери действие — всё полетит на бэкенд!
+                </div>
+
+                <!-- Интерактивный виджет мини-предсказаний -->
+                <div class="mini-fortune-card">
+                    <div class="fortune-header">
+                        <i class="fa-solid fa-cookie-bite"></i>
+                        <span>Печенька с предсказанием для тебя</span>
+                    </div>
+                    <div class="fortune-content" id="fortuneText">
+                        Нажми на кнопку ниже, чтобы узнать, что вселенная (и твой разработчик) подготовили для тебя на сегодня! ✨
+                    </div>
+                    <button class="fortune-btn" onclick="openFortuneCookie()">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Открыть печеньку
+                    </button>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="main-footer">
+            <p>Сделано с любовью на Python & FastAPI 💖 <span id="backendStatus" class="status-dot offline" title="Статус бэкенда"></span></p>
+        </footer>
+    </div>
+
+    <!-- Модальное окно апокалипсиса при нажатии "Нет" -->
+    <div class="mega-modal-overlay" id="megaModal">
+        <div class="mega-modal-content">
+            <div class="hazard-icon"><i class="fa-solid fa-radiation fa-spin"></i></div>
+            <h2>КРИТИЧЕСКИЙ СБОЙ СИСТЕМЫ!</h2>
+            <p>Обнаружено несанкционированное нажатие кнопки <strong>«Нет»</strong>! Ядерный пепел, обрушение серверов, всё горит! 🔥💥</p>
+            <div class="modal-stats">Как ты вообще посмела / смогла её поймать?!</div>
+            <button class="restore-btn" onclick="restoreSystem()">Восстановить мир во Вселенной 🛠️</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно ПРАЗДНИКА при нажатии "Конечно!" -->
+    <div class="celebration-modal-overlay" id="celebrationModal">
+        <div class="celebration-modal-content">
+            <div class="party-icon">🎉🎂🥂</div>
+            <h2>УРААА! ПРАЗДНИК ЛЮБВИ!</h2>
+            <p>Салюты гремят, тортики выкатываются, мир сияет! Самый правильный ответ во Вселенной! 🥰💖</p>
+            <button class="restore-btn" onclick="closeCelebration()">Продолжить вайб ✨</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "http://127.0.0.1:8000";
+        const SECRET_KEY = "andrey123";
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const defaultText = "16 сентября, сейчас";
+            document.getElementById('signalTextField').value = defaultText;
+            document.getElementById('displayTimePreview').innerText = defaultText;
+
+            calculateRelationshipDays('2023-12-13');
+            loadStats();
+        });
+
+        async function loadStats() {
+            try {
+                let response = await fetch(`${API_URL}/api/v1/stats`);
+                if (response.ok) {
+                    let data = await response.json();
+                    document.getElementById('valSweet').innerText = data.sweet || 0;
+                    document.getElementById('valHugs').innerText = data.hug || 0;
+                    document.getElementById('valMiss').innerText = data.miss || 0;
+                    document.getElementById('backendStatus').className = "status-dot online";
+                }
+            } catch (e) {
+                console.log("Бэкенд пока не запущен, работают локальные счетчики");
+            }
+        }
+
+        // Плавная и безопасная убегающая кнопка "Нет" в пределах блока
+        function moveButton() {
+            const btn = document.getElementById('runBtn');
+            const x = (Math.random() - 0.5) * 160;
+            const y = (Math.random() - 0.5) * 80;
+            btn.style.transform = `translate(${x}px, ${y}px)`;
+        }
+
+        // --- ПРАЗДНИК И САЛЮТЫ ИЗ ТОРТИКОВ ПРИ НАЖАТИИ "КОНЕЧНО!" ---
+        function answerYesCelebration() {
+            document.getElementById('questionText').innerText = "Ура! Самый лучший выбор! 🥰💖";
+
+            triggerCelebrationFireworks();
+            sendSignal('love_answer', '💘 Она ответила "Конечно!" — запущен праздничный салют!');
+
+            setTimeout(() => {
+                document.getElementById('celebrationModal').style.display = 'flex';
+            }, 600);
+        }
+
+        function closeCelebration() {
+            const modal = document.getElementById('celebrationModal');
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modal.style.opacity = '1';
+            }, 300);
+
+            const canvas = document.getElementById('explosionCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function triggerCelebrationFireworks() {
+            const canvas = document.getElementById('explosionCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let particles = [];
+            let centerX = window.innerWidth / 2;
+            let centerY = window.innerHeight / 2;
+            const symbols = ['🎂', '🍰', '💖', '✨', '🎁', '🎉', '🥰', '🍫'];
+
+            for (let i = 0; i < 120; i++) {
+                let angle = Math.random() * Math.PI * 2;
+                let speed = Math.random() * 22 + 4;
+                particles.push({
+                    x: centerX,
+                    y: centerY,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed - 2,
+                    size: Math.random() * 24 + 14,
+                    symbol: symbols[Math.floor(Math.random() * symbols.length)],
+                    alpha: 1,
+                    decay: Math.random() * 0.012 + 0.005,
+                    rotation: Math.random() * 360,
+                    rotSpeed: (Math.random() - 0.5) * 6
+                });
+            }
+
+            function animateFireworks() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let alive = false;
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.25;
+                    p.alpha -= p.decay;
+                    p.rotation += p.rotSpeed;
+                    if (p.alpha > 0) {
+                        alive = true;
+                        ctx.save();
+                        ctx.translate(p.x, p.y);
+                        ctx.rotate((p.rotation * Math.PI) / 180);
+                        ctx.globalAlpha = p.alpha;
+                        ctx.font = `${p.size}px sans-serif`;
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText(p.symbol, 0, 0);
+                        ctx.restore();
+                    }
+                });
+                if (alive) {
+                    requestAnimationFrame(animateFireworks);
+                }
+            }
+            animateFireworks();
+        }
+
+        // --- МЕГА-ВЗРЫВ И РАЗРУШЕНИЕ ПРИ НАЖАТИИ "НЕТ" ---
+        function answerNoMegaExplosion() {
+            const wrapper = document.getElementById('pageWrapper');
+            const modal = document.getElementById('megaModal');
+
+            wrapper.classList.add('earthquake');
+            triggerExplosionParticles();
+            sendSignal('mega_explosion', '🚨 АПОКАЛИПСИС! Она нажала "Нет", всё взорвалось в щепки!');
+
+            setTimeout(() => {
+                wrapper.classList.remove('earthquake');
+                wrapper.classList.add('fragmented');
+                modal.style.display = 'flex';
+            }, 900);
+        }
+
+        function restoreSystem() {
+            const wrapper = document.getElementById('pageWrapper');
+            const modal = document.getElementById('megaModal');
+
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modal.style.opacity = '1';
+                wrapper.classList.remove('fragmented');
+            }, 300);
+
+            document.getElementById('questionText').innerText = "Ты меня любишь? 💕";
+            document.getElementById('interactiveBtns').style.display = 'flex';
+            document.getElementById('runBtn').style.transform = 'translate(0px, 0px)'; // возвращаем кнопку на место
+
+            const expCanvas = document.getElementById('explosionCanvas');
+            const expCtx = expCanvas.getContext('2d');
+            expCtx.clearRect(0, 0, expCanvas.width, expCanvas.height);
+        }
+
+        function triggerExplosionParticles() {
+            const canvas = document.getElementById('explosionCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let particles = [];
+            let centerX = window.innerWidth / 2;
+            let centerY = window.innerHeight / 2;
+
+            for (let i = 0; i < 200; i++) {
+                let angle = Math.random() * Math.PI * 2;
+                let speed = Math.random() * 25 + 2;
+                particles.push({
+                    x: centerX,
+                    y: centerY,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    size: Math.random() * 12 + 4,
+                    color: ['#ef4444', '#f97316', '#eab308', '#ec4899', '#ffffff'][Math.floor(Math.random() * 5)],
+                    alpha: 1,
+                    decay: Math.random() * 0.02 + 0.008
+                });
+            }
+
+            function animateExplosion() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let alive = false;
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.3;
+                    p.alpha -= p.decay;
+                    if (p.alpha > 0) {
+                        alive = true;
+                        ctx.save();
+                        ctx.globalAlpha = p.alpha;
+                        ctx.fillStyle = p.color;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.restore();
+                    }
+                });
+                if (alive) {
+                    requestAnimationFrame(animateExplosion);
+                }
+            }
+            animateExplosion();
+        }
+
+        function requestAdminAccess() {
+            let inputKey = prompt("🔒 Введи секретный ключ разработчика:");
+            if (inputKey === SECRET_KEY) {
+                document.getElementById('datetimeBlock').classList.remove('hidden-block');
+            } else if (inputKey !== null) {
+                alert("❌ Неверный ключ!");
+            }
+        }
+
+        function hideAdminPanel() {
+            document.getElementById('datetimeBlock').classList.add('hidden-block');
+        }
+
+        function syncDisplayTime(val) {
+            const preview = document.getElementById('displayTimePreview');
+            preview.innerText = val.trim() !== "" ? val : "Поле даты не заполнено ✨";
+        }
+
+        function calculateRelationshipDays(startDateStr) {
+            const startDate = new Date(startDateStr);
+            const today = new Date();
+            const diffTime = Math.abs(today - startDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            document.getElementById('daysTogether').innerText = `${diffDays} дней 💖`;
+        }
+
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        let bgParticles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 20;
+                this.size = Math.random() * 8 + 4;
+                this.speedY = Math.random() * 1.5 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.8;
+                this.opacity = Math.random() * 0.5 + 0.3;
+                this.rotation = Math.random() * 360;
+                this.rotSpeed = (Math.random() - 0.5) * 2;
+                this.type = Math.random() > 0.4 ? 'heart' : 'star';
+            }
+            update() {
+                this.y -= this.speedY;
+                this.x += this.speedX;
+                this.rotation += this.rotSpeed;
+                if (this.y < -30) this.reset();
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.globalAlpha = this.opacity;
+                ctx.font = `${this.size * 2.5}px sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.type === 'heart' ? '💖' : '✨', 0, 0);
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < 35; i++) {
+            let p = new Particle();
+            p.y = Math.random() * canvas.height;
+            bgParticles.push(p);
+        }
+
+        function animateBg() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            bgParticles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateBg);
+        }
+        animateBg();
+
+        function updateMood(val) {
+            const emojis = ['😭', '🌧️', '😐', '😊', '🥰'];
+            document.getElementById('moodEmoji').innerText = emojis[val - 1];
+        }
+
+        async function sendSignal(actionType, messageText, customMessage = null) {
+            const timeField = document.getElementById('signalTextField');
+            const datetimeBlock = document.getElementById('datetimeBlock');
+
+            let customTimeText = "Текущее время";
+            if (!datetimeBlock.classList.contains('hidden-block') && timeField) {
+                customTimeText = timeField.value;
+            }
+
+            const banner = document.getElementById('responseBanner');
+            banner.style.transform = "scale(1.02)";
+            setTimeout(() => banner.style.transform = "scale(1)", 200);
+            banner.innerHTML = `💌 ${messageText}`;
+
+            try {
+                let response = await fetch(`${API_URL}/api/v1/actions/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action_type: actionType,
+                        custom_time_text: customTimeText,
+                        message: customMessage,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+                if(response.ok) {
+                    document.getElementById('backendStatus').className = "status-dot online";
+                    let data = await response.json();
+                    if (data.updated_counters) {
+                        document.getElementById('valSweet').innerText = data.updated_counters.sweet || 0;
+                        document.getElementById('valHugs').innerText = data.updated_counters.hug || 0;
+                        document.getElementById('valMiss').innerText = data.updated_counters.miss || 0;
+                    }
+                }
+            } catch (e) {
+                console.log("Сигнал отправлен локально:", actionType, customMessage);
+            }
+        }
+
+        async function sendCustomMessage() {
+            const input = document.getElementById('customMsgInput');
+            const textValue = input.value.trim();
+            if(!textValue) return;
+
+            sendSignal('custom', `Сообщение отправлено: "${textValue}"`, textValue);
+            input.value = "";
+        }
+
+        const fortunes = [
+            "💖 Сегодня тебя ждет внезапная порция нежности и вкусняшка без очереди!",
+            "✨ Твоя улыбка сегодня способна растопить даже самый сложный код на бэкенде.",
+            "🥰 Ближе к вечеру тебя ждет крепкое-крепкое объятие и классный сюрприз.",
+            "🌟 Звезды говорят, что ты выглядишь потрясающе прямо в этот самый момент!",
+            "🍫 Разработчик уже планирует побаловать тебя чем-нибудь очень вкусненьким.",
+            "🚀 Твой уровень милоты сегодня официально вышел за пределы допустимой нормы!"
+        ];
+
+        function openFortuneCookie() {
+            const fortuneBox = document.getElementById('fortuneText');
+            fortuneBox.style.opacity = '0.3';
+            setTimeout(() => {
+                const randomIndex = Math.floor(Math.random() * fortunes.length);
+                fortuneBox.innerText = fortunes[randomIndex];
+                fortuneBox.style.opacity = '1';
+            }, 150);
+        }
+    </script>
+</body>
+</html>

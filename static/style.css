@@ -1,0 +1,611 @@
+/* Базовые стили и сброс */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #fff1f2;
+    color: #4c0519;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+#bgCanvas, #explosionCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+}
+
+#explosionCanvas {
+    z-index: 999;
+}
+
+.page-wrapper {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Шапка */
+.main-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+}
+
+.header-badge-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.header-badge {
+    background: #ffe4e6;
+    color: #9f1239;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 5px rgba(244, 63, 94, 0.1);
+}
+
+.secret-trigger-btn {
+    width: 12px;
+    height: 12px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.main-header h1 {
+    font-size: 2.5rem;
+    color: #881337;
+    margin-bottom: 10px;
+}
+
+.main-header p {
+    color: #9f1239;
+    font-size: 1.1rem;
+}
+
+/* Основная сетка */
+.content-grid {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 25px;
+}
+
+@media(max-width: 900px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border: 2px solid #ffe4e6;
+    border-radius: 24px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(244, 63, 94, 0.08);
+}
+
+/* Счетчик дней */
+.love-counter-box {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #fff1f2;
+    padding: 15px 20px;
+    border-radius: 16px;
+    border: 1px solid #fecdd3;
+    margin-bottom: 25px;
+}
+
+.counter-icon {
+    font-size: 28px;
+    color: #e11d48;
+}
+
+.counter-title {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #9f1239;
+}
+
+.counter-value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #881337;
+}
+
+/* Блок статистики */
+.stats-card-box h2, .actions-card-box h2 {
+    font-size: 1.25rem;
+    color: #881337;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stats-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.stat-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    padding: 12px 15px;
+    border-radius: 14px;
+    border: 1px solid #ffe4e6;
+}
+
+.stat-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #881337;
+}
+
+/* Квадратики с иконками статистики */
+.s-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(244, 63, 94, 0.2);
+}
+
+.s-icon.hug { background: linear-gradient(135deg, #f43f5e, #e11d48); }
+.s-icon.sweet { background: linear-gradient(135deg, #fb7185, #f43f5e); }
+.s-icon.miss { background: linear-gradient(135deg, #fda4af, #f43f5e); }
+
+.s-val {
+    font-weight: bold;
+    font-size: 18px;
+    color: #881337;
+}
+
+/* Ползунок настроения */
+.mood-box {
+    background: #fff;
+    padding: 15px;
+    border-radius: 16px;
+    border: 1px solid #ffe4e6;
+    margin-bottom: 25px;
+}
+
+.mood-box label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #881337;
+    margin-bottom: 10px;
+}
+
+.mood-slider {
+    width: 100%;
+    accent-color: #e11d48;
+    cursor: pointer;
+}
+
+/* Интерактивный вопрос с надежно зафиксированной кнопкой "Нет" */
+.interactive-mini-card {
+    background: #fff1f2;
+    border: 1px solid #fda4af;
+    padding: 18px;
+    border-radius: 16px;
+    text-align: center;
+    overflow: hidden; /* чтобы убегающая кнопка не вылазила за рамки карточки */
+}
+
+.interactive-mini-card h3 {
+    font-size: 15px;
+    color: #881337;
+    margin-bottom: 6px;
+}
+
+.interactive-mini-card p {
+    font-size: 14px;
+    color: #9f1239;
+    margin-bottom: 15px;
+}
+
+.interactive-btns {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    min-height: 50px;
+}
+
+.yes-interactive-btn {
+    background: #e11d48;
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    z-index: 2;
+}
+
+.yes-interactive-btn:hover {
+    background: #be123c;
+}
+
+.run-interactive-btn {
+    background: #e2e8f0;
+    color: #475569;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative; /* Обычный поток, чтобы она всегда была рядом */
+    transition: transform 0.15s ease-out;
+}
+
+/* Сетка действий */
+.section-desc {
+    color: #9f1239;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+@media(max-width: 650px) {
+    .actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.action-btn {
+    background: #fff;
+    border: 2px solid #ffe4e6;
+    border-radius: 18px;
+    padding: 20px 15px;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    border-color: #f43f5e;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(244, 63, 94, 0.12);
+}
+
+.action-btn .btn-icon {
+    font-size: 28px;
+    margin-bottom: 4px;
+}
+
+.action-btn .btn-title {
+    font-weight: 700;
+    font-size: 14px;
+    color: #881337;
+}
+
+.action-btn .btn-sub {
+    font-size: 11px;
+    color: #9f1239;
+    opacity: 0.8;
+}
+
+/* Поле ввода кастомного сообщения */
+.custom-message-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.custom-message-box input {
+    flex: 1;
+    padding: 12px 18px;
+    border-radius: 14px;
+    border: 2px solid #ffe4e6;
+    outline: none;
+    font-size: 14px;
+    background: #fff;
+    color: #4c0519;
+}
+
+.custom-message-box input:focus {
+    border-color: #f43f5e;
+}
+
+.custom-message-box button {
+    background: #e11d48;
+    color: white;
+    border: none;
+    width: 48px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.2s;
+}
+
+.custom-message-box button:hover {
+    background: #be123c;
+}
+
+/* Баннер ответа */
+.response-banner {
+    background: #ffe4e6;
+    color: #881337;
+    padding: 12px 18px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 25px;
+    transition: transform 0.2s ease;
+}
+
+/* Печенька с предсказанием */
+.mini-fortune-card {
+    background: #fff;
+    border: 1px solid #ffe4e6;
+    padding: 20px;
+    border-radius: 18px;
+}
+
+.fortune-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #881337;
+    margin-bottom: 10px;
+}
+
+.fortune-content {
+    font-size: 13px;
+    color: #9f1239;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    min-height: 40px;
+    transition: opacity 0.15s ease;
+}
+
+.fortune-btn {
+    background: #fff1f2;
+    color: #e11d48;
+    border: 1px solid #fda4af;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s;
+}
+
+.fortune-btn:hover {
+    background: #ffe4e6;
+}
+
+/* Футер */
+.main-footer {
+    text-align: center;
+    margin-top: 30px;
+    color: #9f1239;
+    font-size: 13px;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-left: 5px;
+}
+
+.status-dot.online { background-color: #22c55e; }
+.status-dot.offline { background-color: #ef4444; }
+
+/* Админ-панель */
+.custom-datetime-container {
+    background: #fff;
+    border: 1px solid #fda4af;
+    padding: 15px;
+    border-radius: 14px;
+    margin-bottom: 20px;
+}
+
+.hidden-block {
+    display: none;
+}
+
+.dt-text-input-group label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: #881337;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.close-panel-btn {
+    background: none;
+    border: none;
+    color: #e11d48;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.dt-text-input-group input {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.dt-preview-screen {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.preview-value {
+    color: #0f172a;
+    font-weight: 600;
+}
+
+/* Плавное появление модалок (никаких резких скачков) */
+.mega-modal-overlay, .celebration-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Активация через класс с плавной анимацией */
+.mega-modal-overlay[style*="flex"], .celebration-modal-overlay[style*="flex"] {
+    opacity: 1;
+}
+
+.mega-modal-overlay {
+    background: radial-gradient(circle, rgba(239, 68, 68, 0.85) 0%, rgba(127, 29, 29, 0.95) 100%);
+}
+
+.celebration-modal-overlay {
+    background: radial-gradient(circle, rgba(244, 63, 94, 0.8) 0%, rgba(136, 19, 55, 0.95) 100%);
+}
+
+.mega-modal-content, .celebration-modal-content {
+    background: white;
+    padding: 35px;
+    border-radius: 24px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+    border: 3px solid #fecdd3;
+    transform: scale(0.9);
+    animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes popUp {
+    to {
+        transform: scale(1);
+    }
+}
+
+.hazard-icon, .party-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.mega-modal-content h2, .celebration-modal-content h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.mega-modal-content h2 { color: #0f172a; }
+.celebration-modal-content h2 { color: #881337; }
+
+.mega-modal-content p, .celebration-modal-content p {
+    font-size: 14px;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.mega-modal-content p { color: #475569; }
+.celebration-modal-content p { color: #9f1239; }
+
+.modal-stats {
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 20px;
+}
+
+.restore-btn {
+    background: #e11d48;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.restore-btn:hover {
+    background: #be123c;
+}
+
+/* Анимации тряски */
+.earthquake {
+    animation: shake 0.5s infinite;
+}
+
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    20% { transform: translate(-3px, 0px) rotate(-1deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    80% { transform: translate(2px, -2px) rotate(1deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+.fragmented {
+    filter: grayscale(0.5) blur(1px);
+    pointer-events: none;
+    transition: filter 0.5s ease;
+}
