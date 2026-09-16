@@ -170,7 +170,7 @@ body {
     color: #881337;
 }
 
-/* Квадратики с иконками статистики */
+/* Иконки статистики */
 .s-icon {
     width: 38px;
     height: 38px;
@@ -218,14 +218,14 @@ body {
     cursor: pointer;
 }
 
-/* Интерактивный вопрос с надежно зафиксированной кнопкой "Нет" */
+/* Интерактивный мини-опрос */
 .interactive-mini-card {
     background: #fff1f2;
     border: 1px solid #fda4af;
     padding: 18px;
     border-radius: 16px;
     text-align: center;
-    overflow: hidden; /* чтобы убегающая кнопка не вылазила за рамки карточки */
+    overflow: hidden;
 }
 
 .interactive-mini-card h3 {
@@ -273,7 +273,7 @@ body {
     border-radius: 12px;
     font-weight: 600;
     cursor: pointer;
-    position: relative; /* Обычный поток, чтобы она всегда была рядом */
+    position: relative;
     transition: transform 0.15s ease-out;
 }
 
@@ -334,7 +334,7 @@ body {
     opacity: 0.8;
 }
 
-/* Поле ввода кастомного сообщения */
+/* Кастомное сообщение */
 .custom-message-box {
     display: flex;
     gap: 10px;
@@ -364,40 +364,38 @@ body {
     border-radius: 14px;
     cursor: pointer;
     font-size: 16px;
-    transition: background 0.2s;
-}
-
-.custom-message-box button:hover {
-    background: #be123c;
 }
 
 /* Баннер ответа */
 .response-banner {
-    background: #ffe4e6;
-    color: #881337;
-    padding: 12px 18px;
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+    padding: 14px 18px;
     border-radius: 14px;
     font-size: 14px;
-    font-weight: 500;
+    color: #881337;
     text-align: center;
-    margin-bottom: 25px;
-    transition: transform 0.2s ease;
+    font-weight: 500;
+    margin-bottom: 20px;
+    transition: transform 0.2s;
 }
 
-/* Печенька с предсказанием */
+/* Карточка печеньки */
 .mini-fortune-card {
     background: #fff;
-    border: 1px solid #ffe4e6;
-    padding: 20px;
+    border: 2px solid #ffe4e6;
     border-radius: 18px;
+    padding: 18px;
+    text-align: center;
 }
 
 .fortune-header {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
     font-size: 14px;
-    font-weight: 700;
     color: #881337;
     margin-bottom: 10px;
 }
@@ -405,35 +403,89 @@ body {
 .fortune-content {
     font-size: 13px;
     color: #9f1239;
-    line-height: 1.5;
     margin-bottom: 15px;
+    line-height: 1.4;
     min-height: 40px;
     transition: opacity 0.15s ease;
 }
 
 .fortune-btn {
-    background: #fff1f2;
-    color: #e11d48;
-    border: 1px solid #fda4af;
+    background: #ffe4e6;
+    color: #9f1239;
+    border: none;
     padding: 8px 16px;
     border-radius: 10px;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
     transition: background 0.2s;
 }
 
 .fortune-btn:hover {
-    background: #ffe4e6;
+    background: #fecdd3;
+}
+
+/* Админ-панель */
+.hidden-block {
+    display: none !important;
+}
+
+.custom-datetime-container {
+    background: #fff;
+    border: 2px dashed #fda4af;
+    padding: 15px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+}
+
+.dt-text-input-group label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #881337;
+    margin-bottom: 8px;
+}
+
+.close-panel-btn {
+    background: transparent;
+    border: none;
+    color: #e11d48;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.dt-text-input-group input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #ffe4e6;
+    outline: none;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.dt-preview-screen {
+    background: #fff1f2;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    color: #9f1239;
+}
+
+.preview-value {
+    font-weight: bold;
+    color: #881337;
+    margin-top: 2px;
 }
 
 /* Футер */
 .main-footer {
     text-align: center;
-    margin-top: 30px;
+    margin-top: 40px;
+    padding: 20px;
     color: #9f1239;
     font-size: 13px;
 }
@@ -443,89 +495,27 @@ body {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    margin-left: 5px;
+    margin-left: 6px;
+    vertical-align: middle;
 }
 
-.status-dot.online { background-color: #22c55e; }
-.status-dot.offline { background-color: #ef4444; }
+.status-dot.offline { background-color: #cbd5e1; }
+.status-dot.online { background-color: #22c55e; box-shadow: 0 0 8px #22c55e; }
 
-/* Админ-панель */
-.custom-datetime-container {
-    background: #fff;
-    border: 1px solid #fda4af;
-    padding: 15px;
-    border-radius: 14px;
-    margin-bottom: 20px;
-}
-
-.hidden-block {
-    display: none;
-}
-
-.dt-text-input-group label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-    color: #881337;
-    font-weight: 600;
-    margin-bottom: 8px;
-}
-
-.close-panel-btn {
-    background: none;
-    border: none;
-    color: #e11d48;
-    cursor: pointer;
-    font-size: 12px;
-}
-
-.dt-text-input-group input {
-    width: 100%;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid #cbd5e1;
-    font-size: 13px;
-    margin-bottom: 10px;
-}
-
-.dt-preview-screen {
-    font-size: 12px;
-    color: #64748b;
-}
-
-.preview-value {
-    color: #0f172a;
-    font-weight: 600;
-}
-
-/* Плавное появление модалок (никаких резких скачков) */
+/* Модальные окна */
 .mega-modal-overlay, .celebration-modal-overlay {
-    display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    backdrop-filter: blur(10px);
+    background: rgba(76, 5, 25, 0.7);
+    backdrop-filter: blur(8px);
     z-index: 1000;
+    display: none;
     justify-content: center;
     align-items: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-/* Активация через класс с плавной анимацией */
-.mega-modal-overlay[style*="flex"], .celebration-modal-overlay[style*="flex"] {
-    opacity: 1;
-}
-
-.mega-modal-overlay {
-    background: radial-gradient(circle, rgba(239, 68, 68, 0.85) 0%, rgba(127, 29, 29, 0.95) 100%);
-}
-
-.celebration-modal-overlay {
-    background: radial-gradient(circle, rgba(244, 63, 94, 0.8) 0%, rgba(136, 19, 55, 0.95) 100%);
+    padding: 20px;
 }
 
 .mega-modal-content, .celebration-modal-content {
@@ -533,41 +523,35 @@ body {
     padding: 35px;
     border-radius: 24px;
     text-align: center;
-    max-width: 400px;
-    width: 90%;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
-    border: 3px solid #fecdd3;
-    transform: scale(0.9);
-    animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    border: 3px solid #f43f5e;
 }
 
-@keyframes popUp {
-    to {
-        transform: scale(1);
-    }
+.hazard-icon {
+    font-size: 48px;
+    color: #ef4444;
+    margin-bottom: 15px;
 }
 
-.hazard-icon, .party-icon {
+.party-icon {
     font-size: 48px;
     margin-bottom: 15px;
 }
 
 .mega-modal-content h2, .celebration-modal-content h2 {
-    font-size: 20px;
+    color: #881337;
+    font-size: 1.4rem;
     margin-bottom: 10px;
 }
 
-.mega-modal-content h2 { color: #0f172a; }
-.celebration-modal-content h2 { color: #881337; }
-
 .mega-modal-content p, .celebration-modal-content p {
+    color: #9f1239;
     font-size: 14px;
     margin-bottom: 15px;
     line-height: 1.5;
 }
-
-.mega-modal-content p { color: #475569; }
-.celebration-modal-content p { color: #9f1239; }
 
 .modal-stats {
     font-size: 12px;
@@ -580,9 +564,10 @@ body {
     color: white;
     border: none;
     padding: 12px 24px;
-    border-radius: 12px;
-    font-weight: 600;
+    border-radius: 14px;
+    font-weight: bold;
     cursor: pointer;
+    font-size: 14px;
     transition: background 0.2s;
 }
 
@@ -590,22 +575,33 @@ body {
     background: #be123c;
 }
 
-/* Анимации тряски */
-.earthquake {
-    animation: shake 0.5s infinite;
-}
-
+/* Анимации катастрофы и праздника */
 @keyframes shake {
     0% { transform: translate(1px, 1px) rotate(0deg); }
-    20% { transform: translate(-3px, 0px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
     40% { transform: translate(1px, -1px) rotate(1deg); }
-    60% { transform: translate(-3px, 1px) rotate(0deg); }
-    80% { transform: translate(2px, -2px) rotate(1deg); }
+    60% { transform: translate(-1px, 2px) rotate(0deg); }
+    80% { transform: translate(-3px, 1px) rotate(-1deg); }
     100% { transform: translate(1px, -2px) rotate(-1deg); }
 }
 
+.earthquake {
+    animation: shake 0.4s infinite;
+}
+
 .fragmented {
-    filter: grayscale(0.5) blur(1px);
-    pointer-events: none;
-    transition: filter 0.5s ease;
+    filter: grayscale(0.6) contrast(1.2);
+    opacity: 0.85;
+}
+
+/* Пульсация сердечка в бейдже */
+@keyframes heartPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.25); }
+    100% { transform: scale(1); }
+}
+
+.pulse-icon {
+    color: #e11d48;
+    animation: heartPulse 1.2s infinite ease-in-out;
 }
