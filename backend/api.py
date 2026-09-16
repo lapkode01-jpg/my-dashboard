@@ -32,6 +32,7 @@ counters = {
     "miss": 0,
     "custom": 0
 }
+mood_emojis = {1: "😭", 2: "🌧️", 3: "😐", 4: "😊", 5: "🥰"}
 
 @app.get('/')
 async def main():
@@ -53,17 +54,24 @@ async def main_actions(body_text: ActionsSchema):
         "movie": "🍿 Предлагает выбрать фильм на вечер!",
         "love_answer": "💘 Ответила «Конечно!» на главный вопрос!",
         "mega_explosion": "🚨 АПОКАЛИПСИС! Нажала кнопку «Нет»!",
-        "custom": f"💬 Кастомное сообщение: **{body_text.message}**"
+        "custom": f"💬 Кастомное сообщение: **{body_text.message}**",
+        "mood_update": "✨ Обновила настроение!"
     }
 
-    desc = action_descriptions.get(action_type)
     time = body_text.timestamp
     time = time.replace('T', ' ')[:19:]
+
+    current_emoji = mood_emojis[body_text.mood]
+    if body_text.action_type == 'mood_update':
+        desc = f'Обновила настроение: {current_emoji}'
+    else:
+        desc = f'Действие: {action_descriptions.get(action_type)}'
 
     tg_text = (
         f"💖 **Новый сигнал с дэшборда!**\n\n"
         f"• **Действие:** {desc}\n"
         f"• **Время:** {time}\n"
+        f"• **Счетчик:** {counters.get(action_type, 'N/A')}"
         f"• **Счетчик:** {counters.get(action_type, 'N/A')}"
     )
     try:

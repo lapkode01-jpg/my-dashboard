@@ -7,4 +7,5 @@ class ActionsSchema(BaseModel):
     custom_time_text: Optional[str] = None
     message: Optional[str] = None
     timestamp: str
+    mood: Optional[int] = 5
 
