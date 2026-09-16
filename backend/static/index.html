@@ -507,7 +507,7 @@
             banner.innerHTML = `💌 ${messageText}`;
 
             try {
-                let response = await fetch(`${API_URL}/api/v1/actions/`, {
+                let response = await fetch(`/api/v1/actions/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
